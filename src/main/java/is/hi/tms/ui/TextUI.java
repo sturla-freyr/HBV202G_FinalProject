@@ -6,9 +6,12 @@ import is.hi.tms.domain.Project;
 import is.hi.tms.domain.Task;
 import is.hi.tms.domain.WorkItem;
 import is.hi.tms.domain.TaskStatus;
+import is.hi.tms.domain.TaskPriority; // For task priority (LOW, MEDIUM, HIGH)
+import java.time.LocalDate;          // For handling dates
 
 import java.util.Scanner;
 import java.util.List;
+import java.util.InputMismatchException;
 
 public class TextUI implements Observer {
     private TaskService taskService;
@@ -24,53 +27,34 @@ public class TextUI implements Observer {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            clearScreen(); // Clear the terminal
-            displayHeader(); // Display the ASCII art header
-            displayProjects(); // Display the list of projects with progress
+            try {
+                clearScreen(); // Clear the terminal
+                displayHeader(); // Display the ASCII art header
+                displayProjects(); // Display the list of projects with progress
 
-            System.out.println("1. Create Task");
-            System.out.println("2. Create Project");
-            System.out.println("3. List Tasks");
-            System.out.println("4. List Projects");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+                System.out.println("1. Create Task");
+                System.out.println("2. Create Project");
+                System.out.println("3. List Tasks");
+                System.out.println("4. Update Project");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
 
-            switch (choice) {
-                case 1 -> {
-                    System.out.print("Enter task title: ");
-                    String title = scanner.nextLine();
-                    System.out.print("Enter task description: ");
-                    String description = scanner.nextLine();
-                    taskService.createTask(title, description, null, null, null);
+                switch (choice) {
+                    case 1 -> createTask(scanner);
+                    case 2 -> createProject(scanner);
+                    case 3 -> listTasks(scanner);
+                    case 4 -> updateProject(scanner);
+                    case 5 -> {
+                        System.out.println("Exiting...");
+                        return;
+                    }
+                    default -> System.out.println("Invalid choice. Please enter a number between 1 and 5.");
                 }
-                case 2 -> {
-                    System.out.print("Enter project name: ");
-                    String name = scanner.nextLine();
-                    projectService.createProject(name);
-                }
-                case 3 -> {
-                    clearScreen();
-                    displayHeader();
-                    System.out.println("Tasks:");
-                    taskService.listTasks().forEach(task -> System.out.println("- " + task.getTitle()));
-                    System.out.println("\nPress Enter to return to the menu...");
-                    scanner.nextLine();
-                }
-                case 4 -> {
-                    clearScreen();
-                    displayHeader();
-                    System.out.println("Projects:");
-                    projectService.listProjects().forEach(project -> System.out.println("- " + project.getTitle()));
-                    System.out.println("\nPress Enter to return to the menu...");
-                    scanner.nextLine();
-                }
-                case 5 -> {
-                    System.out.println("Exiting...");
-                    return;
-                }
-                default -> System.out.println("Invalid choice. Try again.");
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine(); // Clear the invalid input
             }
         }
     }
@@ -81,21 +65,21 @@ public class TextUI implements Observer {
     }
 
     private void displayHeader() {
-        System.out.println("  _____           _           _     __  __                                   ");
-        System.out.println(" |  __ \\         (_)         | |   |  \\/  |                                  ");
-        System.out.println(" | |__) | __ ___  _  ___  ___| |_  | \\  / | __ _ _ __   __ _  __ _  ___ _ __ ");
-        System.out.println(" |  ___/ '__/ _ \\| |/ _ \\/ __| __| | |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|");
-        System.out.println(" | |   | | | (_) | |  __/ (__| |_  | |  | | (_| | | | | (_| | (_| |  __/ |   ");
-        System.out.println(" |_|   |_|  \\___/| |\\___|\\___|\\__| |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|   ");
-        System.out.println("                _/ |                                          __/ |          ");
-        System.out.println("  _            |______ _              _         ______       |___/           ");
-        System.out.println(" | |            / ____| |            | |       |  ____|                      ");
-        System.out.println(" | |__  _   _  | (___ | |_ _   _ _ __| | __ _  | |__ _ __ ___ _   _ _ __     ");
-        System.out.println(" | '_ \\| | | |  \\___ \\| __| | | | '__| |/ _` | |  __| '__/ _ \\ | | | '__|    ");
-        System.out.println(" | |_) | |_| |  ____) | |_| |_| | |  | | (_| | | |  | | |  __/ |_| | |       ");
-        System.out.println(" |_.__/ \\__, | |_____/ \\__|\\__,_|_|  |_|\\__,_| |_|  |_|  \\___|\\__, |_|       ");
-        System.out.println("         __/ |                                                 __/ |         ");
-        System.out.println("        |___/                                                 |___/          ");
+        System.out.println("  _____           _           _     __  __                                               ");
+        System.out.println(" |  __ \\         (_)         | |   |  \\/  |                                              ");
+        System.out.println(" | |__) | __ ___  _  ___  ___| |_  | \\  / | __ _ _ __   __ _  __ _  ___ _ __             ");
+        System.out.println(" |  ___/ '__/ _ \\| |/ _ \\/ __| __| | |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '__|            ");
+        System.out.println(" | |   | | | (_) | |  __/ (__| |_  | |  | | (_| | | | | (_| | (_| |  __/ |               ");
+        System.out.println(" |_|   |_|  \\___/| |\\___|\\___|\\__| |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_|               ");
+        System.out.println("                _/ |                                          __/ |                      ");
+        System.out.println("  _            |______ _              _              ____    |___/          _           ");
+        System.out.println(" | |            / ____| |            | |       ___  |  _ \\                 (_)          ");
+        System.out.println(" | |__  _   _  | (___ | |_ _   _ _ __| | __ _ ( _ ) | |_) |_ __ _   _ _ __  _  __ _ _ __ ");
+        System.out.println(" | '_ \\| | | |  \\___ \\| __| | | | '__| |/ _` |/ _ \\/\\  _ <| '__| | | | '_ \\| |/ _` | '__|");
+        System.out.println(" | |_) | |_| |  ____) | |_| |_| | |  | | (_| | (_>  < |_) | |  | |_| | | | | | (_| | |   ");
+        System.out.println(" |_.__/ \\__, | |_____/ \\__|\\__,_|_|  |_|\\__,_|\\___/\\/____/|_|   \\__, |_| |_| |\\__,_|_|   ");
+        System.out.println("         __/ |                                                   __/ |    _/ |           ");
+        System.out.println("        |___/                                                   |___/    |__/            ");
     }
 
     private void displayProjects() {
@@ -159,6 +143,207 @@ public class TextUI implements Observer {
         }
 
         return (int) ((double) completedTasks / totalTasks * 100);
+    }
+
+    private void createTask(Scanner scanner) {
+        System.out.print("Enter task title: ");
+        String title = scanner.nextLine();
+        System.out.print("Enter task description: ");
+        String description = scanner.nextLine();
+        taskService.createTask(title, description, null, null, null);
+    }
+
+    private void createProject(Scanner scanner) {
+        System.out.print("Enter project name: ");
+        String name = scanner.nextLine();
+        projectService.createProject(name);
+    }
+
+    private void listTasks(Scanner scanner) {
+        clearScreen();
+        displayHeader();
+        System.out.println("Tasks without a project:");
+        List<Task> tasks = taskService.listTasks().stream()
+                .filter(task -> projectService.listProjects().stream()
+                        .noneMatch(project -> project.getWorkItems().contains(task)))
+                .toList();
+
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks available.");
+        } else {
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                System.out.printf("%d. Title: %s | Status: %s | Priority: %s | Deadline: %s%n",
+                        i + 1, task.getTitle(), task.getStatus(), task.getPriority(), task.getDeadline());
+            }
+        }
+
+        System.out.println("\nOptions:");
+        System.out.println("1. Update Task");
+        System.out.println("2. Delete Task");
+        System.out.println("3. Assign Task to Project");
+        System.out.println("4. Return to Main Menu");
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        switch (choice) {
+            case 1 -> updateTask(scanner);
+            case 2 -> deleteTask(scanner);
+            case 3 -> assignTaskToProject(scanner);
+            case 4 -> {
+                return; // Return to main menu
+            }
+            default -> System.out.println("Invalid choice. Try again.");
+        }
+    }
+
+    private void updateTask(Scanner scanner) {
+        System.out.print("Enter task title to update: ");
+        String title = scanner.nextLine();
+        Task task = taskService.listTasks().stream()
+                .filter(t -> t.getTitle().equalsIgnoreCase(title))
+                .findFirst()
+                .orElse(null);
+
+        if (task == null) {
+            System.out.println("Task not found.");
+            return;
+        }
+
+        System.out.println("1. Update Status");
+        System.out.println("2. Update Priority");
+        System.out.println("3. Update Deadline");
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        switch (choice) {
+            case 1 -> {
+                System.out.print("Enter new status (NOT_STARTED, IN_PROGRESS, COMPLETED): ");
+                String status = scanner.nextLine();
+                task.setStatus(TaskStatus.valueOf(status.toUpperCase()));
+            }
+            case 2 -> {
+                System.out.print("Enter new priority (LOW, MEDIUM, HIGH): ");
+                String priority = scanner.nextLine();
+                task.setPriority(TaskPriority.valueOf(priority.toUpperCase()));
+            }
+            case 3 -> {
+                System.out.print("Enter new deadline (YYYY-MM-DD): ");
+                String deadline = scanner.nextLine();
+                task.setDeadline(LocalDate.parse(deadline));
+            }
+            default -> System.out.println("Invalid choice.");
+        }
+    }
+
+    private void deleteTask(Scanner scanner) {
+        System.out.print("Enter task title to delete: ");
+        String title = scanner.nextLine();
+        Task task = taskService.listTasks().stream()
+                .filter(t -> t.getTitle().equalsIgnoreCase(title))
+                .findFirst()
+                .orElse(null);
+
+        if (task == null) {
+            System.out.println("Task not found.");
+        } else {
+            taskService.deleteTask(task);
+            System.out.println("Task deleted.");
+        }
+    }
+
+    private void assignTaskToProject(Scanner scanner) {
+        System.out.print("Enter task title to assign: ");
+        String taskTitle = scanner.nextLine();
+        Task task = taskService.listTasks().stream()
+                .filter(t -> t.getTitle().equalsIgnoreCase(taskTitle))
+                .findFirst()
+                .orElse(null);
+
+        if (task == null) {
+            System.out.println("Task not found.");
+            return;
+        }
+
+        System.out.print("Enter project name to assign the task to: ");
+        String projectName = scanner.nextLine();
+        Project project = projectService.listProjects().stream()
+                .filter(p -> p.getTitle().equalsIgnoreCase(projectName))
+                .findFirst()
+                .orElse(null);
+
+        if (project == null) {
+            System.out.println("Project not found.");
+        } else {
+            projectService.addWorkItemToProject(project, task);
+            System.out.println("Task assigned to project.");
+        }
+    }
+
+    private void deleteProject(Scanner scanner) {
+        System.out.print("Enter project name to delete: ");
+        String name = scanner.nextLine();
+        Project project = projectService.listProjects().stream()
+                .filter(p -> p.getTitle().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+
+        if (project == null) {
+            System.out.println("Project not found.");
+        } else {
+            projectService.listProjects().remove(project);
+            System.out.println("Project deleted.");
+        }
+    }
+
+    private void updateProject(Scanner scanner) {
+        System.out.print("Enter project name to update: ");
+        String name = scanner.nextLine();
+        Project project = projectService.listProjects().stream()
+                .filter(p -> p.getTitle().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
+
+        if (project == null) {
+            System.out.println("Project not found.");
+            return;
+        }
+
+        clearScreen();
+        displayHeader();
+        System.out.printf("Project: %s%n", project.getTitle());
+        System.out.println("Tasks:");
+        List<WorkItem> workItems = project.getWorkItems();
+        if (workItems.isEmpty()) {
+            System.out.println("No tasks assigned to this project.");
+        } else {
+            for (WorkItem workItem : workItems) {
+                if (workItem instanceof Task task) {
+                    System.out.printf("Title: %s | Status: %s | Priority: %s | Deadline: %s%n",
+                            task.getTitle(), task.getStatus(), task.getPriority(), task.getDeadline());
+                }
+            }
+        }
+
+        System.out.println("\nOptions:");
+        System.out.println("1. Delete Project");
+        System.out.println("2. Return to Main Menu");
+        System.out.print("Enter your choice: ");
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
+        switch (choice) {
+            case 1 -> {
+                projectService.listProjects().remove(project);
+                System.out.println("Project deleted.");
+            }
+            case 2 -> {
+                return; // Return to main menu
+            }
+            default -> System.out.println("Invalid choice. Try again.");
+        }
     }
 
     @Override
