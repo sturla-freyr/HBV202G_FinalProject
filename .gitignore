@@ -1,0 +1,25 @@
+# Maven target directory (build artifacts)
+target/
+
+# Logs
+*.log
+
+# IDE-specific files
+.idea/
+*.iml
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+
+# Javadoc output
+docs/javadoc/
+
+# Project-specific files
+specification.md
+vibe.txt
