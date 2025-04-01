@@ -2,7 +2,7 @@ package is.hi.tms.domain;
 
 import java.time.LocalDate;
 
-public class Task {
+public class Task implements WorkItem {
     private String title;
     private String description;
     private LocalDate deadline;
@@ -17,6 +17,7 @@ public class Task {
         this.priority = priority;
     }
 
+    @Override
     public String getTitle() {
         return title;
     }

@@ -6,7 +6,9 @@ import is.hi.tms.domain.TaskStatus;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskService {
     private List<Task> tasks;
@@ -35,5 +37,29 @@ public class TaskService {
 
     public List<Task> listTasks() {
         return tasks;
+    }
+
+    public List<Task> sortTasksByDeadline() {
+        return tasks.stream()
+                .sorted(Comparator.comparing(Task::getDeadline))
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> sortTasksByPriority() {
+        return tasks.stream()
+                .sorted(Comparator.comparing(Task::getPriority))
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> sortTasksByStatus() {
+        return tasks.stream()
+                .sorted(Comparator.comparing(Task::getStatus))
+                .collect(Collectors.toList());
+    }
+
+    public List<Task> filterTasksByStatus(TaskStatus status) {
+        return tasks.stream()
+                .filter(task -> task.getStatus() == status)
+                .collect(Collectors.toList());
     }
 }

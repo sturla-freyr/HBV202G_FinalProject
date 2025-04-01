@@ -41,4 +41,24 @@ public class TaskServiceTest {
         taskService.deleteTask(task);
         assertTrue(taskService.listTasks().isEmpty());
     }
+
+    @Test
+    public void testSortTasksByDeadline() {
+        TaskService taskService = new TaskService();
+        Task task1 = taskService.createTask("Task 1", "Description 1", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
+        Task task2 = taskService.createTask("Task 2", "Description 2", LocalDate.of(2025, 3, 1), TaskStatus.IN_PROGRESS, TaskPriority.HIGH);
+        List<Task> sortedTasks = taskService.sortTasksByDeadline();
+        assertEquals(task2, sortedTasks.get(0));
+        assertEquals(task1, sortedTasks.get(1));
+    }
+
+    @Test
+    public void testFilterTasksByStatus() {
+        TaskService taskService = new TaskService();
+        Task task1 = taskService.createTask("Task 1", "Description 1", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
+        Task task2 = taskService.createTask("Task 2", "Description 2", LocalDate.of(2025, 3, 1), TaskStatus.IN_PROGRESS, TaskPriority.HIGH);
+        List<Task> filteredTasks = taskService.filterTasksByStatus(TaskStatus.NOT_STARTED);
+        assertEquals(1, filteredTasks.size());
+        assertEquals(task1, filteredTasks.get(0));
+    }
 }

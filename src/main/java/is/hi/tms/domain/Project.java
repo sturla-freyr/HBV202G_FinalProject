@@ -3,32 +3,29 @@ package is.hi.tms.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Project {
+public class Project implements WorkItem {
     private String name;
-    private List<Task> tasks;
+    private List<WorkItem> workItems;
 
     public Project(String name) {
         this.name = name;
-        this.tasks = new ArrayList<>();
+        this.workItems = new ArrayList<>();
     }
 
-    public String getName() {
+    @Override
+    public String getTitle() {
         return name;
     }
 
-    public List<Task> getTasks() {
-        return tasks;
+    public void addWorkItem(WorkItem workItem) {
+        workItems.add(workItem);
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public void removeWorkItem(WorkItem workItem) {
+        workItems.remove(workItem);
     }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
-    }
-
-    public void clearTasks() {
-        tasks.clear();
+    public List<WorkItem> getWorkItems() {
+        return workItems;
     }
 }

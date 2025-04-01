@@ -1,7 +1,7 @@
 package is.hi.tms.service;
 
 import is.hi.tms.domain.Project;
-import is.hi.tms.domain.Task;
+import is.hi.tms.domain.WorkItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,12 @@ public class ProjectService {
         return project;
     }
 
-    public void addTaskToProject(Project project, Task task) {
-        project.addTask(task);
+    public void addWorkItemToProject(Project project, WorkItem workItem) {
+        project.addWorkItem(workItem); // Updated to use addWorkItem
     }
 
-    public void removeTaskFromProject(Project project, Task task) {
-        project.removeTask(task);
+    public void removeWorkItemFromProject(Project project, WorkItem workItem) {
+        project.removeWorkItem(workItem); // Updated to use removeWorkItem
     }
 
     public List<Project> listProjects() {
