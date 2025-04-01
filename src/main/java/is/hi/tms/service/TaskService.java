@@ -3,6 +3,8 @@ package is.hi.tms.service;
 import is.hi.tms.domain.Task;
 import is.hi.tms.domain.TaskPriority;
 import is.hi.tms.domain.TaskStatus;
+import is.hi.tms.ui.Observer;
+import is.hi.tms.ui.Subject;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,16 +12,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TaskService {
+public class TaskService implements Subject {
     private List<Task> tasks;
+    private List<Observer> observers;
 
     public TaskService() {
         this.tasks = new ArrayList<>();
+        this.observers = new ArrayList<>();
     }
 
     public Task createTask(String title, String description, LocalDate deadline, TaskStatus status, TaskPriority priority) {
         Task task = new Task(title, description, deadline, status, priority);
         tasks.add(task);
+        notifyObservers("Task created: " + title);
         return task;
     }
 
@@ -33,6 +38,7 @@ public class TaskService {
 
     public void deleteTask(Task task) {
         tasks.remove(task);
+        notifyObservers("Task deleted: " + task.getTitle());
     }
 
     public List<Task> listTasks() {
@@ -61,5 +67,22 @@ public class TaskService {
         return tasks.stream()
                 .filter(task -> task.getStatus() == status)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
     }
 }
