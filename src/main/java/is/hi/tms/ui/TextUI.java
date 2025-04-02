@@ -13,10 +13,20 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.InputMismatchException;
 
+/**
+ * Text-based user interface for interacting with the Task Management System.
+ * Implements Observer to receive notifications from TaskService and ProjectService.
+ */
 public class TextUI implements Observer {
     private TaskService taskService;
     private ProjectService projectService;
 
+    /**
+     * Constructs a TextUI with the given task and project services.
+     *
+     * @param taskService the task service to use
+     * @param projectService the project service to use
+     */
     public TextUI(TaskService taskService, ProjectService projectService) {
         this.taskService = taskService;
         this.projectService = projectService;
@@ -24,6 +34,9 @@ public class TextUI implements Observer {
         this.projectService.addObserver(this);
     }
 
+    /**
+     * Starts the main user interaction loop for the console UI.
+     */
     public void start() {
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -346,6 +359,11 @@ public class TextUI implements Observer {
         }
     }
 
+    /**
+     * Receives and displays a notification from the subject.
+     *
+     * @param message the message received
+     */
     @Override
     public void update(String message) {
         System.out.println("Notification: " + message);

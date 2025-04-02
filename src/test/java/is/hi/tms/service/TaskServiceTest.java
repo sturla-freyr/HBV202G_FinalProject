@@ -11,10 +11,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for TaskService class.
+ */
 public class TaskServiceTest {
 
     @Test
     public void testCreateTask() {
+        // Create a TaskService instance
         TaskService taskService = new TaskService();
         Task task = taskService.createTask("Test Task", "Description", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
         List<Task> tasks = taskService.listTasks();
@@ -24,6 +28,7 @@ public class TaskServiceTest {
 
     @Test
     public void testUpdateTask() {
+        // Update a task
         TaskService taskService = new TaskService();
         Task task = taskService.createTask("Test Task", "Description", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
         taskService.updateTask(task, "Updated Task", "Updated Description", LocalDate.of(2025, 5, 1), TaskStatus.IN_PROGRESS, TaskPriority.HIGH);
@@ -36,6 +41,7 @@ public class TaskServiceTest {
 
     @Test
     public void testDeleteTask() {
+        // Delete a task
         TaskService taskService = new TaskService();
         Task task = taskService.createTask("Test Task", "Description", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
         taskService.deleteTask(task);
@@ -44,6 +50,7 @@ public class TaskServiceTest {
 
     @Test
     public void testSortTasksByDeadline() {
+        // Sort tasks by deadline
         TaskService taskService = new TaskService();
         Task task1 = taskService.createTask("Task 1", "Description 1", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
         Task task2 = taskService.createTask("Task 2", "Description 2", LocalDate.of(2025, 3, 1), TaskStatus.IN_PROGRESS, TaskPriority.HIGH);
@@ -54,6 +61,7 @@ public class TaskServiceTest {
 
     @Test
     public void testFilterTasksByStatus() {
+        // Filter tasks by status
         TaskService taskService = new TaskService();
         Task task1 = taskService.createTask("Task 1", "Description 1", LocalDate.of(2025, 4, 1), TaskStatus.NOT_STARTED, TaskPriority.MEDIUM);
         Task task2 = taskService.createTask("Task 2", "Description 2", LocalDate.of(2025, 3, 1), TaskStatus.IN_PROGRESS, TaskPriority.HIGH);

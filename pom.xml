@@ -53,5 +53,30 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+        <plugins>
+            <!-- Javadoc plugin (latest stable as of 2024) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Site plugin: Use 3.12.1 (not 3.4.1!) -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.12.1</version>
+            </plugin>
+        </plugins>
+        </pluginManagement>
     </build>
 </project>
