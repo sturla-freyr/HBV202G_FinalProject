@@ -95,4 +95,5 @@ mvn exec:java -Dexec.mainClass="is.hi.tms.Main"
 
 ## 📘 License
 
-This project is licensed under the MIT License – see [LICENSE](LICENSE) for details.
+This project is dedicated to the public domain under the [CC0 1.0 Universal (Public Domain Dedication)](LICENSE).  
+You can copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission.
