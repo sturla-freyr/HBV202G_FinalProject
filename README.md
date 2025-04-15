@@ -61,16 +61,14 @@ src/
 
 ### 🔄 Compile:
 ```bash
-mvn compile
+mvn clean package
 ```
 
 ### ▶️ Run the app:
-```bash
-mvn exec:java -Dexec.mainClass="is.hi.tms.Main"
-```
-
-> Make sure the `exec-maven-plugin` is configured in your `pom.xml`.
-
+For linux/MacOs:
+./run.sh
+For Windows:
+./run.bat
 ---
 
 ## 📦 Maven Goals

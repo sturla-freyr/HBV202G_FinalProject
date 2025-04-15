@@ -36,6 +36,31 @@ When a task or project is added, removed, or changed, the relevant service notif
 
 ---
 
+### ✅ Composite Pattern
+
+The Composite Pattern is used to represent the hierarchical relationship between `Project` and `Task`. Both `Project` and `Task` implement the `WorkItem` interface, allowing them to be treated uniformly. A `Project` can contain multiple `WorkItem` instances, enabling nested structures of tasks and sub-projects.
+
+**Participants:**
+
+- **Component interface**: `WorkItem` – defines common operations for both `Task` and `Project`.
+- **Leaf**: `Task` – represents individual tasks with no children.
+- **Composite**: `Project` – represents a collection of `WorkItem` instances, which can include both `Task` and `Project`.
+
+**Implementations:**
+
+| Role       | Class       |
+|------------|-------------|
+| Component  | `WorkItem`  |
+| Leaf       | `Task`      |
+| Composite  | `Project`   |
+
+**Example Usage:**
+
+- A `Project` can contain multiple `Task` objects or even other `Project` objects, forming a tree-like structure.
+- Operations like `getDetails()` or `calculateTotalEffort()` can be called on a `Project`, which will recursively aggregate data from its children.
+
+---
+
 ## 📦 Packaging and Execution
 
 - The application is packaged using the **Maven Assembly Plugin** into a "fat JAR" that includes all dependencies.
@@ -84,6 +109,9 @@ This diagram includes:
 - Class relationships
 - Interface implementations
 - Enumerations (`TaskStatus`, `TaskPriority` using «enumeration» stereotype)
+- `WorkItem` as the common interface.
+- `Task` and `Project` as its implementations.
+- A recursive relationship where `Project` can contain other `WorkItem` instances.
 
 ---
 
@@ -92,6 +120,6 @@ This diagram includes:
 The Task Management System is a cleanly structured, pattern-driven project designed to demonstrate strong fundamentals in:
 
 - Java OOP design
-- Design patterns (Observer)
+- Design patterns (Observer, Composite)
 - MVC-style separation
 - Build automation and documentation
